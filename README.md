@@ -16,7 +16,7 @@ deterministic finite automaton, runs log lines through it, and labels every
 line `allow`, `alert`, or `ignore` along with the automaton path that produced
 the label.
 
-**Live demo:** https://igorcsis.github.io/policyguard/
+**Live demo:** https://igorcsis.github.io/policyguard/  
 **Core engine:** Python 3.10 or newer, standard library only, no `pip install`
 
 ```
