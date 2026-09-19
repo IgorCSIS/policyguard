@@ -1,0 +1,101 @@
+name: Tests and Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  python:
+    name: Python engine
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # The graded path has to work on whatever Python a lab machine has.
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Tests
+        run: python -m unittest discover -s tests -t . -v
+
+      - name: The CLI runs on the shipped sample
+        run: python -m policyguard --explain --stats
+
+      - name: Alerts in the sample make --fail-on-alert exit non-zero
+        run: |
+          if python -m policyguard --fail-on-alert; then
+            echo "Expected a non-zero exit because the sample contains alerts."
+            exit 1
+          fi
+
+      - name: No dependency crept into the graded path
+        run: |
+          if [ -f requirements.txt ] || [ -f pyproject.toml ]; then
+            echo "The engine is meant to be standard library only."
+            exit 1
+          fi
+
+  web:
+    name: Demo and parity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: npm ci
+        working-directory: web
+
+      - name: Typecheck
+        run: npm run typecheck
+        working-directory: web
+
+      - name: TypeScript tests
+        run: npm test
+        working-directory: web
+
+      # The browser demo and the graded CLI have to say the same thing about
+      # the same log. This fails the build if the port has drifted.
+      - name: Parity between TypeScript and Python
+        run: npm run parity
+        working-directory: web
+
+      - run: npm run build
+        working-directory: web
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+  deploy:
+    name: Deploy
+    needs: [python, web]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

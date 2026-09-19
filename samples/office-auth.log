@@ -1,0 +1,66 @@
+Sep 18 23:58:01 fileserver CRON[2210]: pam_unix(cron:session): cron session opened for user root by (uid=0)
+Sep 18 23:58:01 fileserver CRON[2210]: pam_unix(cron:session): cron session closed for user root
+Sep 18 23:59:12 gw-monitor healthcheck[880]: health probe ok target=fileserver latency=4ms
+Sep 19 00:00:03 fileserver sshd[3301]: Accepted publickey for backupsvc from 10.14.2.9 port 51044 ssh2
+Sep 19 00:00:03 fileserver systemd-logind[701]: pam_unix(sshd:session): session opened for user backupsvc by (uid=0)
+Sep 19 00:04:41 fileserver backup[3390]: nightly archive complete 41.2GB written to /srv/backups
+Sep 19 00:05:02 fileserver systemd-logind[701]: pam_unix(sshd:session): session closed for user backupsvc
+Sep 19 00:12:18 gw-monitor healthcheck[880]: health probe ok target=vpn-gw latency=7ms
+Sep 19 01:14:55 vpn-gw openvpn[1180]: peer 198.51.100.77 vpn tls handshake failed certificate expired
+Sep 19 01:15:31 vpn-gw openvpn[1180]: peer 198.51.100.77 vpn tls handshake failed certificate expired
+Sep 19 01:20:02 vpn-gw sshd[4001]: Failed password for invalid user admin from 203.0.113.42 port 55102 ssh2
+Sep 19 01:20:04 vpn-gw sshd[4003]: Failed password for invalid user admin from 203.0.113.42 port 55108 ssh2
+Sep 19 01:20:06 vpn-gw sshd[4005]: Failed password for invalid user root from 203.0.113.42 port 55114 ssh2
+Sep 19 01:20:09 vpn-gw sshd[4007]: Failed password for invalid user oracle from 203.0.113.42 port 55120 ssh2
+Sep 19 01:20:11 vpn-gw sshd[4009]: Failed password for invalid user postgres from 203.0.113.42 port 55126 ssh2
+Sep 19 01:20:14 vpn-gw sshd[4011]: Failed password for invalid user test from 203.0.113.42 port 55132 ssh2
+Sep 19 01:20:17 vpn-gw sshd[4013]: Failed password for invalid user deploy from 203.0.113.42 port 55138 ssh2
+Sep 19 01:20:19 vpn-gw sshd[4015]: Failed password for invalid user git from 203.0.113.42 port 55144 ssh2
+Sep 19 01:21:44 vpn-gw sshd[4020]: Connection closed by authenticating user root 203.0.113.42 port 55150
+Sep 19 01:25:00 gw-monitor healthcheck[880]: health probe ok target=fileserver latency=5ms
+Sep 19 02:02:13 frontdesk sshd[5120]: Accepted publickey for itadmin from 10.14.2.31 port 49820 ssh2
+Sep 19 02:02:13 frontdesk systemd-logind[640]: pam_unix(sshd:session): session opened for user itadmin by (uid=0)
+Sep 19 02:03:47 frontdesk sudo[5140]: itadmin : TTY=pts/0 ; PWD=/home/itadmin ; USER=root ; COMMAND=/usr/bin/apt update
+Sep 19 02:04:02 frontdesk systemd-logind[640]: pam_unix(sshd:session): session closed for user itadmin
+Sep 19 02:30:00 fileserver CRON[6010]: pam_unix(cron:session): cron session opened for user www-data by (uid=0)
+Sep 19 02:30:00 fileserver CRON[6010]: pam_unix(cron:session): cron session closed for user www-data
+Sep 19 03:11:29 shopfloor sshd[6402]: Failed password for jrivera from 10.14.2.58 port 40122 ssh2
+Sep 19 03:11:38 shopfloor sshd[6402]: Accepted password for jrivera from 10.14.2.58 port 40122 ssh2
+Sep 19 03:12:04 shopfloor sudo[6420]: jrivera : sudo authentication failure ; TTY=pts/1 ; USER=root ; COMMAND=/usr/sbin/tcpdump
+Sep 19 03:12:44 shopfloor sudo[6431]: jrivera : sudo authentication failure ; TTY=pts/1 ; USER=root ; COMMAND=/usr/sbin/tcpdump
+Sep 19 03:20:15 gw-monitor healthcheck[880]: health probe ok target=shopfloor latency=3ms
+Sep 19 04:00:00 fileserver CRON[7001]: pam_unix(cron:session): cron session opened for user root by (uid=0)
+Sep 19 04:00:01 fileserver CRON[7001]: pam_unix(cron:session): cron session closed for user root
+Sep 19 05:42:19 office-ap wlan[220]: rogue ap detected ssid="FreeOfficeWiFi" channel=6 rssi=-71
+Sep 19 05:42:51 office-ap wlan[220]: client 10.14.2.77 roamed to bssid a4:2b:8c:11:04:9e
+Sep 19 06:15:33 vpn-gw openvpn[1180]: peer 10.14.2.58 authenticated cn=jrivera cipher=AES-256-GCM
+Sep 19 06:15:33 vpn-gw openvpn[1180]: peer 10.14.2.58 assigned address 10.99.0.14
+Sep 19 07:01:02 frontdesk systemd-logind[640]: pam_unix(login:session): session opened for user root by LOGIN(uid=0)
+Sep 19 07:01:44 frontdesk bash[7720]: root shell history cleared by user root
+Sep 19 07:30:09 gw-monitor healthcheck[880]: health probe ok target=frontdesk latency=6ms
+Sep 19 08:14:20 shopfloor sshd[8110]: Failed password for invalid user scanner from 192.0.2.19 port 33012 ssh2
+Sep 19 08:20:41 shopfloor sshd[8140]: Accepted password for mlopez from 10.14.2.64 port 44120 ssh2
+Sep 19 08:21:07 shopfloor sudo[8155]: mlopez : TTY=pts/2 ; PWD=/var/log ; USER=root ; COMMAND=/usr/bin/tail -f syslog
+Sep 19 09:02:55 fileserver smbd[9012]: share "invoices" connected by mlopez from 10.14.2.64
+Sep 19 09:40:11 fileserver smbd[9088]: share "invoices" disconnected by mlopez
+Sep 19 10:05:00 gw-monitor healthcheck[880]: health probe ok target=fileserver latency=4ms
+Sep 19 10:31:26 vpn-gw openvpn[1180]: peer 198.51.100.77 vpn tls handshake failed certificate expired
+Sep 19 11:00:00 fileserver CRON[9400]: pam_unix(cron:session): cron session opened for user root by (uid=0)
+Sep 19 11:00:01 fileserver CRON[9400]: pam_unix(cron:session): cron session closed for user root
+Sep 19 12:18:37 frontdesk sshd[9820]: Failed password for invalid user admin from 198.51.100.23 port 60110 ssh2
+Sep 19 12:18:40 frontdesk sshd[9822]: Failed password for invalid user admin from 198.51.100.23 port 60116 ssh2
+Sep 19 12:18:43 frontdesk sshd[9824]: Failed password for invalid user administrator from 198.51.100.23 port 60122 ssh2
+Sep 19 12:45:02 shopfloor kernel: usb 2-1: new high-speed USB device number 7 using xhci_hcd
+Sep 19 13:02:19 office-ap wlan[220]: client 10.14.2.31 roamed to bssid a4:2b:8c:11:04:a2
+Sep 19 13:30:00 gw-monitor healthcheck[880]: health probe ok target=vpn-gw latency=8ms
+Sep 19 14:09:58 fileserver sshd[10240]: Accepted publickey for itadmin from 10.14.2.31 port 50114 ssh2
+Sep 19 14:10:31 fileserver sudo[10260]: itadmin : TTY=pts/0 ; PWD=/etc ; USER=root ; COMMAND=/usr/bin/systemctl restart smbd
+Sep 19 15:22:40 shopfloor sudo[10510]: mlopez : sudo authentication failure ; TTY=pts/2 ; USER=root ; COMMAND=/usr/bin/passwd
+Sep 19 16:00:00 fileserver CRON[11002]: pam_unix(cron:session): cron session opened for user root by (uid=0)
+Sep 19 16:00:01 fileserver CRON[11002]: pam_unix(cron:session): cron session closed for user root
+Sep 19 17:45:12 vpn-gw openvpn[1180]: peer 10.14.2.64 authenticated cn=mlopez cipher=AES-256-GCM
+Sep 19 18:30:00 gw-monitor healthcheck[880]: health probe ok target=fileserver latency=5ms
+Sep 19 19:12:08 office-ap wlan[220]: rogue ap detected ssid="office-guest-2" channel=11 rssi=-64
+Sep 19 21:00:00 fileserver CRON[12300]: pam_unix(cron:session): cron session opened for user root by (uid=0)
+Sep 19 21:00:01 fileserver CRON[12300]: pam_unix(cron:session): cron session closed for user root
+Sep 19 23:59:59 gw-monitor healthcheck[880]: health probe ok target=fileserver latency=4ms

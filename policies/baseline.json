@@ -1,0 +1,134 @@
+{
+  "name": "baseline office policy",
+  "description": "A small starter pack for a shared office network. Every pattern here is a defensive signature: it describes something worth noticing in a log, and nothing here performs any action against any host.",
+  "default_decision": "ignore",
+  "rules": [
+    {
+      "id": "allow_backup_job",
+      "label": "Nightly backup job",
+      "decision": "allow",
+      "priority": 120,
+      "pattern": [
+        "session",
+        "opened",
+        "for",
+        "user",
+        "backupsvc"
+      ],
+      "description": "The scheduled backup account logging in on purpose. Allowed so it stops competing with the privilege rules below."
+    },
+    {
+      "id": "allow_known_admin_host",
+      "label": "Admin box on the office VLAN",
+      "decision": "allow",
+      "priority": 110,
+      "pattern": [
+        "accepted",
+        "publickey",
+        "for",
+        "itadmin"
+      ],
+      "description": "Key based login by the office admin account. Keys are the policy here, so this is what good looks like."
+    },
+    {
+      "id": "brute_force_ssh",
+      "label": "Repeated SSH password failures",
+      "decision": "alert",
+      "severity": "high",
+      "pattern": [
+        "failed",
+        "password",
+        "for"
+      ],
+      "threshold": 5,
+      "window_seconds": 20,
+      "description": "Five or more failed SSH passwords from one address inside a short window. One failure is a typo. Five is somebody working through a list."
+    },
+    {
+      "id": "invalid_user_probe",
+      "label": "Login attempt for an account that does not exist",
+      "decision": "alert",
+      "severity": "medium",
+      "pattern": [
+        "invalid",
+        "user"
+      ],
+      "description": "Somebody guessing account names. Worth seeing even once, because a real person knows their own username."
+    },
+    {
+      "id": "sudo_auth_failure",
+      "label": "Failed sudo attempt",
+      "decision": "alert",
+      "severity": "high",
+      "pattern": [
+        "sudo",
+        "authentication",
+        "failure"
+      ],
+      "description": "A failed privilege escalation on a shared box. Rare enough in normal use that each one deserves a look."
+    },
+    {
+      "id": "root_shell_opened",
+      "label": "Interactive root shell",
+      "decision": "alert",
+      "severity": "medium",
+      "pattern": [
+        "session",
+        "opened",
+        "for",
+        "user",
+        "root"
+      ],
+      "description": "Somebody is working as root rather than through sudo. Usually a habit worth correcting, occasionally worth asking about."
+    },
+    {
+      "id": "vpn_bad_certificate",
+      "label": "VPN certificate rejected",
+      "decision": "alert",
+      "severity": "medium",
+      "pattern": [
+        "vpn",
+        "tls",
+        "handshake",
+        "failed"
+      ],
+      "description": "A VPN client failing its handshake. Often an expired certificate, sometimes something else."
+    },
+    {
+      "id": "ap_rogue_ssid",
+      "label": "Unexpected access point name",
+      "decision": "alert",
+      "severity": "low",
+      "pattern": [
+        "rogue",
+        "ap",
+        "detected"
+      ],
+      "description": "The office access point reporting an SSID it does not recognise nearby. Low severity because coffee shops exist."
+    },
+    {
+      "id": "ignore_cron_chatter",
+      "label": "Routine cron noise",
+      "decision": "ignore",
+      "priority": 60,
+      "pattern": [
+        "cron",
+        "session",
+        "opened"
+      ],
+      "description": "Cron opening and closing sessions all day. Ranked above the alert rules on purpose: a cron session for root is not somebody working as root, so this is the more specific rule and it should win. Tuning a noisy detection is what a rule like this is for."
+    },
+    {
+      "id": "ignore_health_probe",
+      "label": "Monitoring health check",
+      "decision": "ignore",
+      "priority": 20,
+      "pattern": [
+        "health",
+        "probe",
+        "ok"
+      ],
+      "description": "The uptime checker doing its job once a minute."
+    }
+  ]
+}

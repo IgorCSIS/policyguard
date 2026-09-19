@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#080D14" />
+    <title>PolicyGuard: defensive log policy as a DFA</title>
+    <meta
+      name="description"
+      content="Paste log lines and see each one labelled allow, alert, or ignore by a policy compiled into a deterministic finite automaton, with the state path that fired. Runs entirely in your browser."
+    />
+    <meta name="author" content="Igor Lima" />
+    <link rel="canonical" href="https://igorcsis.github.io/policyguard/" />
+    <link rel="icon" type="image/svg+xml" href="/policyguard/favicon.svg" />
+    <!--
+      No web fonts. The page promises that a pasted log never leaves the
+      browser, and a font request would still be a request going out while
+      somebody's log is on screen.
+    -->
+  </head>
+  <body class="bg-slate-950 text-mist-200 antialiased">
+    <!--
+      The heading and intro are repeated word for word from hero() in
+      src/main.ts, which replaces this the moment it boots. Without it the
+      document has no text at all, so a link shared anywhere would unfurl as
+      a blank page. If you change one, change the other.
+    -->
+    <div id="app">
+      <section class="mx-auto max-w-5xl px-5 pt-10">
+        <h1 class="text-3xl font-bold tracking-tight text-mist-50">Defensive log policy as a DFA</h1>
+        <p class="mt-4 max-w-2xl leading-relaxed">
+          Paste log lines. Every one comes back labelled allow, alert, or ignore, with the rule that
+          decided and the automaton path that fired. The policy is compiled once into a
+          deterministic finite automaton, so adding rules does not slow the matching down.
+        </p>
+        <p class="mt-3 text-sm text-mist-400">
+          Educational demo. It reads logs and classifies them. It does not block, scan, or contact
+          anything.
+        </p>
+      </section>
+    </div>
+
+    <noscript>
+      <div style="max-width: 34rem; margin: 2rem auto; padding: 0 1.25rem; font-family: system-ui, sans-serif; line-height: 1.6; color: #c9d4e0">
+        <h2 style="color: #f6f8fa; font-size: 1.25rem; margin: 0 0 0.75rem">This demo needs JavaScript</h2>
+        <p style="margin: 0 0 1rem">
+          The whole classifier runs in your browser, which is how a pasted log stays on your own
+          machine instead of being uploaded to a server. With JavaScript off there is nothing left
+          to do the work.
+        </p>
+        <p style="margin: 0">
+          The Python command line version needs no browser at all:
+          <code style="color: #5eead4">python -m policyguard</code>
+        </p>
+      </div>
+    </noscript>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

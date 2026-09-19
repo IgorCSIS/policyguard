@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Obvious on a dark surface, and not carried by colour alone. */
+  :focus-visible {
+    outline: 2px solid theme("colors.teal.400");
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background-color: theme("colors.teal.500");
+    color: #04120f;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Every target clears 44px, because this gets shown on a phone. */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm
+           font-semibold transition-colors;
+    min-height: 2.75rem;
+  }
+
+  .btn-primary {
+    @apply bg-teal-500 text-slate-950 hover:bg-teal-400;
+  }
+
+  .btn-ghost {
+    @apply border border-slate-600 text-mist-200 hover:border-teal-400 hover:text-teal-300;
+  }
+
+  .card {
+    @apply rounded-card border border-slate-700 bg-slate-850;
+  }
+
+  .label {
+    @apply mb-1.5 block font-mono text-[0.68rem] uppercase tracking-[0.14em] text-mist-400;
+  }
+
+  /* A badge always carries its word as well as its colour, so the three
+     decisions are still distinguishable without colour vision. */
+  .badge {
+    @apply inline-flex items-center rounded px-2 py-0.5 font-mono text-[0.7rem] font-semibold
+           uppercase tracking-[0.1em];
+  }
+
+  .badge-alert {
+    @apply bg-verdict-alert-bg text-verdict-alert;
+  }
+
+  .badge-allow {
+    @apply bg-verdict-allow-bg text-verdict-allow;
+  }
+
+  .badge-ignore {
+    @apply bg-verdict-ignore-bg text-verdict-ignore;
+  }
+
+  .filter-tab {
+    @apply rounded-md px-3 py-1.5 text-sm transition-colors;
+  }
+
+  .filter-tab[aria-pressed="true"] {
+    @apply bg-slate-700 text-mist-50;
+  }
+
+  .filter-tab[aria-pressed="false"] {
+    @apply text-mist-400 hover:text-mist-200;
+  }
+}
