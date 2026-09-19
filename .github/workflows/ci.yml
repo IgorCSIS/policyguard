@@ -83,19 +83,24 @@ jobs:
       - run: npm run build
         working-directory: web
 
-      # enablement creates the Pages site over the API on the first run, so
-      # nobody has to go and flip a switch in Settings before the first deploy
-      # can work. The pages: write permission above is what allows it.
-      - uses: actions/configure-pages@v5
+      - uses: actions/upload-artifact@v4
         with:
-          enablement: true
-
-      - uses: actions/upload-pages-artifact@v3
-        with:
+          name: demo-site
           path: web/dist
+          retention-days: 1
 
+  # Deploying is kept out of the jobs above on purpose. Publishing depends on
+  # a repository setting rather than on the code, so a repository with Pages
+  # switched off should still show green tests: a red tick that means "the
+  # owner has not clicked a button" teaches everyone to ignore red ticks.
+  #
+  # Note that the workflow token cannot switch Pages on by itself. Creating a
+  # Pages site needs repository admin, which GITHUB_TOKEN does not have even
+  # with pages: write, so actions/configure-pages fails with "Resource not
+  # accessible by integration" until an admin sets Settings, Pages, Source to
+  # GitHub Actions once. After that this job works on every push.
   deploy:
-    name: Deploy
+    name: Deploy the demo
     needs: [python, web]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -103,5 +108,15 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: demo-site
+          path: dist
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
       - id: deployment
         uses: actions/deploy-pages@v4
