@@ -9,7 +9,7 @@
   <img src="https://img.shields.io/badge/license-MIT-2DD4BF?labelColor=0D141E&style=flat-square" alt="MIT licensed">
 </p>
 
-# PolicyGuard
+# PolicyGuard: log policy rules compiled into a deterministic finite automaton
 
 A defensive log classifier. It compiles a pack of policy rules into a
 deterministic finite automaton, runs log lines through it, and labels every
@@ -17,7 +17,7 @@ line `allow`, `alert`, or `ignore` along with the automaton path that produced
 the label.
 
 **Live demo:** https://igorcsis.github.io/policyguard/  
-**Core engine:** Python 3.10 or newer, standard library only, no `pip install`
+**Stack:** Python 3.10 or newer, standard library only, no `pip install`
 
 ```
 $ python -m policyguard --explain
@@ -137,6 +137,17 @@ possibly read.
    would make the removal linear, for no benefit.
 
 ### Graph: the automaton itself
+
+<p align="center">
+  <img src="assets/failure-links.svg" alt="Three branches of the compiled trie. Dashed failure links carry q22 into the failed chain at q10, and q27 and q28 into the session chain at q1 and q2, so a line starting with cron still reaches the rules that match session opened for user root." width="880">
+</p>
+
+Every state carries a failure link, and 28 of the 31 point straight back at
+the start. The three above are the ones that do something: they are why
+`cron session opened for user root` reaches `ignore_cron_chatter` and
+`root_shell_opened` at once, and why the precedence rules below then have to
+decide between them.
+
 
 The automaton is a directed graph. States are vertices, transitions are
 labelled edges. Two things fall out of treating it as one:

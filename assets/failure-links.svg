@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 545" width="1200" height="545" role="img" aria-label="The three failure links in the compiled automaton that point somewhere other than the start state.">
+  <title>The failure links that matter</title>
+  <desc>Three branches of the trie. Dashed links carry q22 into the failed chain at q10, and q27 and q28 into the session chain at q1 and q2, so a line beginning with vpn or cron still reaches rules whose patterns start later.</desc>
+
+  <defs>
+    <marker id="pg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#31435C"/>
+    </marker>
+    <marker id="pg-fail" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5EEAD4"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="545" rx="16" fill="#080D14"/>
+  <rect x="0.5" y="0.5" width="1199" height="544" rx="15.5" fill="none" stroke="#223044"/>
+
+  <text x="48" y="42" font-family="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#F6F8FA">Three failure links point anywhere but q0. These are all of them.</text>
+  <text x="48" y="66" font-family="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#8CA0B8">31 states carry a failure link and 28 fall back to the start. The three drawn dashed are what let one line match two rules.</text>
+
+  <g stroke="#31435C" stroke-width="2" fill="none" marker-end="url(#pg-arrow)">
+    <path d="M92 282 L152 186"/>
+    <path d="M222 160 L268 160"/>
+    <path d="M338 160 L384 160"/>
+    <path d="M454 160 L500 160"/>
+    <path d="M570 160 L616 160"/>
+    <path d="M686 150 L742 126"/>
+    <path d="M686 170 L742 194"/>
+    <path d="M98 300 L144 300"/>
+    <path d="M216 300 L268 300"/>
+    <path d="M342 300 L394 300"/>
+    <path d="M468 300 L520 300"/>
+    <path d="M746 300 L798 300"/>
+    <path d="M872 300 L924 300"/>
+    <path d="M92 318 L152 406"/>
+    <path d="M222 442 L268 442"/>
+    <path d="M338 442 L384 442"/>
+  </g>
+
+  <g stroke="#5EEAD4" stroke-width="2" fill="none" stroke-dasharray="5 4" marker-end="url(#pg-fail)">
+    <path d="M568 276 C 600 232, 672 236, 706 276"/>
+    <path d="M300 420 C 286 344, 208 336, 196 190"/>
+    <path d="M422 420 C 414 338, 328 330, 312 190"/>
+  </g>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" text-anchor="middle">
+    <circle cx="74" cy="300" r="22" fill="#111A26" stroke="#31435C" stroke-width="2"/><text x="74" y="305" fill="#C9D4E0">q0</text>
+    <circle cx="196" cy="160" r="22" fill="#111A26" stroke="#31435C" stroke-width="2"/><text x="196" y="165" fill="#C9D4E0">q1</text>
+    <circle cx="312" cy="160" r="22" fill="#111A26" stroke="#31435C" stroke-width="2"/><text x="312" y="165" fill="#C9D4E0">q2</text>
+    <circle cx="428" cy="160" r="22" fill="#111A26" stroke="#31435C" stroke-width="2"/><text x="428" y="165" fill="#C9D4E0">q3</text>
+    <circle cx="544" cy="160" r="22" fill="#111A26" stroke="#31435C" stroke-width="2"/><text x="544" y="165" fill="#C9D4E0">q4</text>
+    <circle cx="766" cy="118" r="22" fill="#0C2A22" stroke="#34D399" stroke-width="2"/><text x="766" y="123" fill="#34D399">q5</text>
+    <circle cx="766" cy="202" r="22" fill="#2B1417" stroke="#F87171" stroke-width="2"/><text x="766" y="207" fill="#F87171">q18</text>
+    <circle cx="190" cy="300" r="22" fill="#111A26" stroke="#31435C" stroke-width="2"/><text x="190" y="305" fill="#C9D4E0">q19</text>
+    <circle cx="316" cy="300" r="22" fill="#111A26" stroke="#31435C" stroke-width="2"/><text x="316" y="305" fill="#C9D4E0">q20</text>
+    <circle cx="442" cy="300" r="22" fill="#111A26" stroke="#31435C" stroke-width="2"/><text x="442" y="305" fill="#C9D4E0">q21</text>
+    <circle cx="568" cy="300" r="22" fill="#2B1417" stroke="#F87171" stroke-width="2"/><text x="568" y="305" fill="#F87171">q22</text>
+    <circle cx="724" cy="300" r="22" fill="#111A26" stroke="#31435C" stroke-width="2"/><text x="724" y="305" fill="#C9D4E0">q10</text>
+    <circle cx="850" cy="300" r="22" fill="#111A26" stroke="#31435C" stroke-width="2"/><text x="850" y="305" fill="#C9D4E0">q11</text>
+    <circle cx="976" cy="300" r="22" fill="#2B1417" stroke="#F87171" stroke-width="2"/><text x="976" y="305" fill="#F87171">q12</text>
+    <circle cx="196" cy="442" r="22" fill="#111A26" stroke="#31435C" stroke-width="2"/><text x="196" y="447" fill="#C9D4E0">q26</text>
+    <circle cx="312" cy="442" r="22" fill="#111A26" stroke="#31435C" stroke-width="2"/><text x="312" y="447" fill="#C9D4E0">q27</text>
+    <circle cx="428" cy="442" r="22" fill="#161F2C" stroke="#94A3B8" stroke-width="2"/><text x="428" y="447" fill="#94A3B8">q28</text>
+  </g>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#8CA0B8" text-anchor="middle">
+    <text x="124" y="212">session</text>
+    <text x="254" y="152">opened</text>
+    <text x="370" y="152">for</text>
+    <text x="486" y="152">user</text>
+    <text x="612" y="152">backupsvc</text>
+    <text x="702" y="180">root</text>
+    <text x="121" y="292">vpn</text>
+    <text x="242" y="292">tls</text>
+    <text x="368" y="292">handshake</text>
+    <text x="494" y="292">failed</text>
+    <text x="772" y="292">password</text>
+    <text x="898" y="292">for</text>
+    <text x="110" y="374">cron</text>
+    <text x="254" y="434">session</text>
+    <text x="370" y="434">opened</text>
+  </g>
+
+  <!-- The arcs terminate on their targets with arrowheads, so naming each one
+       again just crowds the middle of the picture. One legend does it. -->
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10.5" fill="#5EEAD4">
+    <text x="600" y="238">q22 fails to q10</text>
+  </g>
+  <g transform="translate(956 430)">
+    <path d="M0 0 H34" stroke="#5EEAD4" stroke-width="2" stroke-dasharray="5 4" fill="none" marker-end="url(#pg-fail)"/>
+    <text x="44" y="4" font-family="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#8CA0B8">failure link</text>
+    <path d="M0 24 H34" stroke="#31435C" stroke-width="2" fill="none" marker-end="url(#pg-arrow)"/>
+    <text x="44" y="28" font-family="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#8CA0B8">trie edge</text>
+  </g>
+
+  <g font-family="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="12" font-weight="600">
+    <text x="800" y="114" fill="#34D399">allow_backup_job</text>
+    <text x="800" y="129" font-size="10.5" font-weight="400" fill="#8CA0B8">allow, priority 120</text>
+    <text x="800" y="198" fill="#F87171">root_shell_opened</text>
+    <text x="800" y="213" font-size="10.5" font-weight="400" fill="#8CA0B8">alert, priority 50</text>
+    <text x="1010" y="296" fill="#F87171">brute_force_ssh</text>
+    <text x="1010" y="311" font-size="10.5" font-weight="400" fill="#8CA0B8">alert, priority 50</text>
+    <text x="462" y="438" fill="#94A3B8">ignore_cron_chatter</text>
+    <text x="462" y="453" font-size="10.5" font-weight="400" fill="#8CA0B8">ignore, priority 60</text>
+  </g>
+
+  <rect x="48" y="482" width="1104" height="44" rx="9" fill="#111A26" stroke="#223044"/>
+  <text x="66" y="500" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#C9D4E0">cron session opened for user root by (uid=0)</text>
+  <text x="66" y="516" font-family="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#8CA0B8">reaches q28 and, through the failure links, q18 as well. Two rules match, so priority decides: ignore at 60 outranks alert at 50.</text>
+</svg>
