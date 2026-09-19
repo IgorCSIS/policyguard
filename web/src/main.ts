@@ -88,10 +88,10 @@ function hero(): string {
       </h1>
       <p class="mt-4 max-w-2xl leading-relaxed">
         Paste log lines. Each one comes back labelled allow, alert, or ignore, with the rule and
-        the state path behind the decision. Runs in your browser. Nothing uploaded.
+        the state path behind the decision.
       </p>
       <p class="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-mist-400">
-        <span class="badge badge-trust">In your browser</span>
+        <span class="badge badge-trust">Stays on this device</span>
         <span>Educational demo. It classifies logs. It does not block, scan, or contact anything.</span>
       </p>
     </section>`;
@@ -100,21 +100,29 @@ function hero(): string {
 function inputPanel(): string {
   const packLine = state.pack
     ? `${escapeHtml(state.pack.name)}, ${state.pack.rules.length} rules`
-    : "loading the rule pack";
+    : "Loading rules\u2026";
 
   // While the pack is loading there is nothing useful either button can do,
   // so they say so rather than looking live and swallowing a click.
   const classifyLabel = state.busy
-    ? "Loading rules"
+    ? "Loading rules\u2026"
     : state.classifying
-      ? "Classifying"
+      ? "Classifying\u2026"
       : "Classify these lines";
-  const sampleLabel = state.busy ? "Loading rules" : "Load sample and classify";
-  const disabled = state.busy || state.classifying;
+  const sampleLabel = state.busy ? "Loading rules\u2026" : "Load sample and classify";
+
+  const waiting = state.busy || state.classifying;
+  const hasText = state.text.trim() !== "";
+
+  // Whichever action is actually useful right now is the filled one. With an
+  // empty box that is loading the sample; with text in it, classifying what
+  // is there. Nothing moves, only the emphasis changes.
+  const classifyTone = hasText ? "btn-primary" : "btn-ghost";
+  const sampleTone = hasText ? "btn-ghost" : "btn-primary";
 
   return `
     <section class="mx-auto mt-5 max-w-5xl px-5 sm:mt-8">
-      <div class="card p-4 sm:p-5" aria-busy="${disabled}">
+      <div class="card p-4 sm:p-5" aria-busy="${waiting}">
         <div class="flex flex-wrap items-baseline justify-between gap-2">
           <h2 class="text-sm font-semibold text-mist-50">Log lines</h2>
           <span class="font-mono text-xs text-mist-400">${packLine}</span>
@@ -126,13 +134,14 @@ function inputPanel(): string {
                  focus:border-teal-400 sm:h-auto"
           placeholder="Sep 19 01:20:02 vpn-gw sshd[4001]: Failed password for invalid user admin from 203.0.113.42 port 55102 ssh2">${escapeHtml(state.text)}</textarea>
         <div class="mt-4 flex flex-wrap gap-2">
-          <button id="load-sample" type="button" class="btn btn-primary" ${disabled ? "disabled" : ""}>
+          <button id="load-sample" type="button" class="btn ${sampleTone}" ${waiting ? "disabled" : ""}>
             ${sampleLabel}
           </button>
-          <button id="classify" type="button" class="btn btn-ghost" ${disabled ? "disabled" : ""}>
+          <button id="classify" type="button" class="btn ${classifyTone}"
+                  ${waiting || !hasText ? "disabled" : ""}>
             ${classifyLabel}
           </button>
-          <button id="clear" type="button" class="btn btn-ghost">Clear</button>
+          <button id="clear" type="button" class="btn btn-ghost" ${hasText ? "" : "disabled"}>Clear</button>
         </div>
       </div>
     </section>`;
@@ -414,6 +423,30 @@ async function loadSample(): Promise<void> {
   }
 }
 
+/**
+ * Enable or disable the controls that only make sense with text present.
+ *
+ * Called on every keystroke, so it edits the two buttons in place instead of
+ * re-rendering. Classify with an empty box would do nothing but show an
+ * error, and a control that can only fail should not look ready.
+ */
+function syncTextDependentButtons(): void {
+  const hasText = state.text.trim() !== "";
+  const classify = document.querySelector<HTMLButtonElement>("#classify");
+  const clear = document.querySelector<HTMLButtonElement>("#clear");
+  if (classify) {
+    classify.disabled = !hasText || state.busy || state.classifying;
+    classify.classList.toggle("btn-primary", hasText);
+    classify.classList.toggle("btn-ghost", !hasText);
+  }
+  const sample = document.querySelector<HTMLButtonElement>("#load-sample");
+  if (sample) {
+    sample.classList.toggle("btn-primary", !hasText);
+    sample.classList.toggle("btn-ghost", hasText);
+  }
+  if (clear) clear.disabled = !hasText;
+}
+
 function bind(): void {
   if (!app) return;
 
@@ -428,9 +461,13 @@ function bind(): void {
     document.getElementById("log-input")?.focus();
   });
 
-  app.querySelector<HTMLTextAreaElement>("#log-input")?.addEventListener("input", (event) => {
+  const field = app.querySelector<HTMLTextAreaElement>("#log-input");
+  field?.addEventListener("input", () => {
     // Kept in state so a re-render does not throw away what was typed.
-    state.text = (event.target as HTMLTextAreaElement).value;
+    state.text = field.value;
+    // Toggled directly rather than by re-rendering, because re-rendering the
+    // panel while somebody is typing in it would take the caret with it.
+    syncTextDependentButtons();
   });
 
   app.querySelector<HTMLButtonElement>("#clear-filter")?.addEventListener("click", () => {
@@ -449,8 +486,25 @@ function bind(): void {
   });
 }
 
+/**
+ * How long the loading state stays up even when there is nothing to wait for.
+ *
+ * The rule pack is a small file served from the same origin, so on a warm
+ * cache it arrives in a few milliseconds and the busy state would flicker
+ * past unseen. A state nobody can see is a state nobody can trust, and the
+ * flicker itself reads as a glitch. This holds it just long enough to
+ * register as deliberate.
+ */
+const MINIMUM_BOOT_PAINT_MS = 180;
+
+/** Resolve after a delay, so the boot state is visible rather than implied. */
+function pause(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+}
+
 /** Fetch the rule pack this demo enforces, then let the buttons work. */
 async function boot(): Promise<void> {
+  const started = performance.now();
   try {
     const response = await fetch(POLICY_URL);
     if (!response.ok) throw new Error(String(response.status));
@@ -465,6 +519,8 @@ async function boot(): Promise<void> {
           : "The rule pack could not be loaded, so nothing can be classified right now.",
     };
   } finally {
+    const elapsed = performance.now() - started;
+    if (elapsed < MINIMUM_BOOT_PAINT_MS) await pause(MINIMUM_BOOT_PAINT_MS - elapsed);
     state.busy = false;
     render();
   }

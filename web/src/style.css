@@ -93,7 +93,7 @@
      allow badge, which taught the wrong colour before a single line had been
      classified, so it gets its own teal treatment. */
   .badge-trust {
-    @apply bg-teal-500/10 text-teal-300;
+    @apply border border-teal-400/40 bg-teal-500/10 text-teal-300;
   }
 
   /* The three chips shown before anything is classified. Not buttons, not

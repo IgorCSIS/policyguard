@@ -91,11 +91,11 @@ No installation step. Clone the repository and run it from the root.
 ### The tests
 
 ```bash
-python -m unittest discover -s tests -t .      # 103 tests
+python -m unittest discover -s tests -t .      # 106 tests
 python tools/appendix_a_audit.py policyguard tools tests
 ```
 
-103 tests covering compilation, all three decisions, precedence, threshold
+106 tests covering compilation, all three decisions, precedence, threshold
 windows, empty input, unknown tokens, path explain, the DOT export, both
 reporters, every rule pack error, and the CLI exit codes. CI runs them on
 Python 3.10, 3.11, 3.12 and 3.13.
@@ -284,11 +284,26 @@ A rule pack is JSON. Every rule needs an `id`, a `decision`, and a `pattern`.
 | `priority` | Higher wins when several rules match. Defaults by decision |
 | `severity` | `info`, `low`, `medium`, or `high`. Only meaningful on alerts |
 | `threshold` | Matches needed before the rule fires. Default 1 |
-| `window_seconds` | How wide the sliding window is. Default counts events |
+| `window_seconds` | How wide the sliding window is, counted in **events**, not clock time. See the note below |
 | `description` | One line of prose, shown as the reason |
 
 Matching is on normalized tokens, so case and log punctuation do not matter.
 `sshd[4001]:` becomes `sshd` and `4001`.
+
+### `window_seconds` counts events, not seconds
+
+Worth being blunt about, because the field name promises more than the code
+does today. A rule with `"threshold": 5, "window_seconds": 20` fires when five
+matching lines appear from one source within **twenty events** of each other in
+the stream, not within twenty seconds on the clock. Nothing parses the
+timestamp on a line.
+
+That is deliberate rather than unfinished. Log timestamp formats vary
+enormously, and parsing them badly would produce a window that is wrong in
+ways nobody notices. Counting events is a weaker guarantee that is always
+true. The field keeps the name because that is what it will mean once
+timestamps are parsed, and this paragraph exists so nobody has to read the
+source to find that out.
 
 ### Precedence, and the one sharp edge
 
