@@ -1,7 +1,7 @@
 """Tests for the command line interface.
 
-The CLI is what a grader runs and what a demo runs, so its exit codes and
-its output shape matter as much as the engine behind it.
+The CLI is what a person actually runs, so its exit codes and its output
+shape matter as much as the engine behind it.
 """
 
 from __future__ import annotations
@@ -44,7 +44,7 @@ class TestDefaults(unittest.TestCase):
     """Running it with no arguments."""
 
     def test_no_arguments_classifies_the_shipped_sample(self) -> None:
-        """A grader should be able to type one command and see it work."""
+        """Somebody should be able to type one command and see it work."""
         code, out, _ = _run([])
         self.assertEqual(code, EXIT_OK)
         self.assertIn('lines classified', out)

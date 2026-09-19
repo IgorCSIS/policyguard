@@ -1,7 +1,7 @@
 """The deterministic finite automaton that does the matching.
 
-The model, stated plainly for anyone grading this
--------------------------------------------------
+The model, stated plainly
+-------------------------
 Every rule is a sequence of tokens. All of the sequences are compiled into
 one automaton built the Aho-Corasick way:
 

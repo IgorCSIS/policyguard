@@ -16,8 +16,8 @@ The public surface is small on purpose::
     for verdict in engine.classify_lines(open('samples/auth.log')):
         print(verdict)
 
-Everything here is standard library only, so it runs on a lab machine with
-no ``pip install`` step.
+Everything here is standard library only, so it runs anywhere Python does,
+with no ``pip install`` step.
 """
 
 from __future__ import annotations

@@ -8,9 +8,9 @@ Adding a third format, say CSV for a spreadsheet, means writing one class and
 registering it. Nothing in :mod:`policyguard.cli` has to change, and nothing
 else in the package knows or cares how a verdict gets displayed.
 
-This is also where the package demonstrates abstraction and polymorphism for
-the coursework: :class:`Reporter` cannot be instantiated, it declares what
-every reporter must provide, and the CLI holds one without knowing which.
+It is also the clearest piece of abstraction in the package:
+:class:`Reporter` cannot be instantiated, it declares what every reporter must
+provide, and the CLI holds one without knowing which.
 """
 
 from __future__ import annotations

@@ -1,6 +1,6 @@
 # Design notes
 
-Written for somebody grading this, or for me in six months. The README says
+Written for whoever reads this next, including me in six months. The README says
 what the project does. This says why it is built the way it is, and works the
 automaton by hand so the claims in the README can be checked rather than
 believed.

@@ -35,10 +35,10 @@ $ python -m policyguard --explain
 
 ## What PolicyGuard is, and what it is not
 
-**It is** a classifier and a teaching project. It reads text, decides what
-each line means according to a rule pack you can read and edit, and shows its
-working. It is built for CSIS 252 as a demonstration of hash tables, queues,
-graphs, and algorithmic complexity applied to something real.
+**It is** a classifier and a demonstration project. It reads text, decides
+what each line means according to a rule pack you can read and edit, and shows
+its working. It exists to show hash tables, queues, graphs and algorithmic
+complexity doing real work on a real problem, rather than in an exercise.
 
 **It is not** a security product, and it deliberately cannot become one:
 
@@ -59,8 +59,8 @@ It is also not a claim that anything was prevented. It classifies a text file.
 
 | Layer | Choice | Why |
 | --- | --- | --- |
-| Engine | Python 3.10+, standard library only | Runs on a lab machine with no install step, which keeps the graded path dependency free |
-| Structures | `dict` for the transition table, `deque` for BFS and for the sliding window | The course structures, used because they are the right tool rather than bolted on |
+| Engine | Python 3.10+, standard library only | Runs anywhere Python is, with no install step and nothing to keep up to date |
+| Structures | `dict` for the transition table, `deque` for BFS and for the sliding window | Chosen because they are the right tool here, not bolted on |
 | Rules | JSON | Readable and editable by somebody who does not write Python, and `json` is in the standard library |
 | CLI | `argparse`, `python -m policyguard` | Demos on any machine with Python and nothing else |
 | Tests | `unittest` | Standard library, so `python -m unittest` works everywhere |
@@ -163,7 +163,7 @@ of the token alphabet, and `z` the number of matches reported.
 | Threshold window update | `O(1)` amortized | Only the front of the queue can be stale |
 | Memory | `O(states * k + n_sources * window)` | Table plus the live windows |
 
-The row worth defending in a viva is the bolded one. **Classification does not
+The row that matters is the bolded one. **Classification does not
 get slower as rules are added.** The naive approach, checking every rule
 against every line, is `O(n * m * r)`. Compiling all the rules into one
 automaton first replaces the `r` with a one-time `O(t)` build. Ten rules or
@@ -175,14 +175,14 @@ very large alphabet it would be the thing to reconsider first, and the fix is
 to store only the trie edges and follow failure links at match time, trading
 that memory back for a slower constant factor.
 
-## CSIS 252 final project pitch
+## Why it is built this way
 
-The assignment asks for data structures and object oriented design applied to
-a cybersecurity problem. Log triage is a good fit because the naive solution
-is obviously too slow and the fast solution is a finite automaton, which is a
-data structure a person can draw on a whiteboard and then defend.
+Log triage is a good problem to build carefully. The obvious solution, check
+every rule against every line, is obviously too slow, and the fast solution is
+a finite automaton, which is a structure you can draw on a whiteboard and then
+explain to somebody.
 
-What this project demonstrates:
+What the code demonstrates, and where to look for each:
 
 - **Abstract data types.** `Event`, `Rule`, `Transition`, `Automaton`,
   `PolicyEngine`, `Verdict`, and `Alert` each own one idea. Attributes are
@@ -203,9 +203,11 @@ What this project demonstrates:
   export to a standard graph format.
 - **Algorithmic complexity** as a design driver, with the naive alternative
   written down so the improvement is measurable rather than asserted.
-- **Cybersecurity application** that stays strictly defensive, which is both
-  the ethical choice and the more interesting engineering problem: the hard
-  part of detection is not matching, it is precedence and noise.
+- **Conventions that are checked rather than claimed**, by a style auditor
+  with its own tests. See `tools/appendix_a_audit.py`.
+- **A security application** that stays strictly defensive, which is both the
+  right choice and the more interesting engineering problem: the hard part of
+  detection is not matching, it is precedence and noise.
 
 The most instructive bug found while building it is in the git history: the
 sample log contains cron sessions for root, and the "interactive root shell"

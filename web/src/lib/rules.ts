@@ -2,7 +2,7 @@
  * Rules and rule packs, ported from policyguard/rule.py.
  *
  * Python is the source of truth for rule semantics. This file mirrors it so
- * the browser demo and the graded CLI agree, and scripts/check-parity.mjs
+ * the browser demo and the Python CLI agree, and scripts/check-parity.mjs
  * fails the build if they ever stop agreeing. When changing behaviour, change
  * the Python first, then port it here, then run the parity check.
  */

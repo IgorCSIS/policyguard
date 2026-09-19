@@ -2,8 +2,8 @@
 
 Style rules that live only in a document drift. This walks the package with
 ``ast`` and reports every place the code disagrees with the conventions, so
-the claim in the README is something a grader can verify in one command
-rather than take on trust.
+the claim in the README is something anybody can verify in one command rather
+than take on trust.
 
 What it checks
 --------------

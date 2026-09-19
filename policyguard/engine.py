@@ -1,6 +1,6 @@
 """The engine that turns log lines into verdicts.
 
-This is where the three data structures the course cares about meet:
+This is where the three interesting data structures meet:
 
 * a **hash table**, the automaton's transition dictionary, doing the matching
 * a **queue**, the sliding window that decides when a threshold rule fires

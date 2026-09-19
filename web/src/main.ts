@@ -6,7 +6,7 @@
  *
  * The engine under this is a port of the Python package, and
  * scripts/check-parity.mjs proves the two agree on the shipped sample. What
- * the page shows is what the graded CLI would say about the same log.
+ * the page shows is what the Python CLI would say about the same log.
  *
  * Nothing is uploaded. The rule pack and the sample log are fetched from this
  * site's own folder on load, and after that the page makes no requests at all.
@@ -230,7 +230,7 @@ function footer(): string {
       <div class="mx-auto flex max-w-5xl flex-col gap-3 px-5 py-8 text-sm text-mist-400 sm:flex-row sm:items-center sm:justify-between">
         <p>Classifies logs. Never blocks, scans, or contacts anything.</p>
         <div class="flex flex-wrap gap-4">
-          <span>CSIS 252 aligned educational demo</span>
+          <span>Educational demo. Defensive classification only.</span>
           <a href="${PORTFOLIO_URL}" target="_blank" rel="noopener noreferrer" class="hover:text-teal-300">
             Built by Igor Lima
           </a>
