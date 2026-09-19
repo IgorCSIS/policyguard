@@ -45,6 +45,23 @@
     @apply border border-slate-600 text-mist-200 hover:border-teal-400 hover:text-teal-300;
   }
 
+  /* A disabled control has to look disabled. Without this the primary button
+     stayed full teal while the rule pack was still loading, so it invited a
+     click that did nothing. */
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  .btn:disabled:hover,
+  .btn[aria-disabled="true"]:hover {
+    @apply bg-teal-500;
+  }
+
+  .btn-ghost:disabled:hover {
+    @apply border-slate-600 bg-transparent text-mist-200;
+  }
+
   .card {
     @apply rounded-card border border-slate-700 bg-slate-850;
   }
@@ -72,8 +89,26 @@
     @apply bg-verdict-ignore-bg text-verdict-ignore;
   }
 
+  /* Green means ALLOW and nothing else. The privacy chip used to borrow the
+     allow badge, which taught the wrong colour before a single line had been
+     classified, so it gets its own teal treatment. */
+  .badge-trust {
+    @apply bg-teal-500/10 text-teal-300;
+  }
+
+  /* The three chips shown before anything is classified. Not buttons, not
+     focusable, just the visual language of a verdict introduced early. */
+  .badge-sample {
+    @apply gap-2 px-2.5 py-1 text-[0.72rem];
+  }
+
+  /* Tighter horizontally on a phone so the four tabs sit on one row. A
+     sticky bar that wraps to two rows was holding a fifth of a small
+     viewport for the whole scroll. The 44px height is kept either way,
+     because that is the part that makes them tappable. */
   .filter-tab {
-    @apply rounded-md px-3 py-1.5 text-sm transition-colors;
+    @apply inline-flex items-center rounded-md px-2.5 text-xs transition-colors sm:px-3 sm:text-sm;
+    min-height: 2.75rem;
   }
 
   .filter-tab[aria-pressed="true"] {
@@ -82,5 +117,50 @@
 
   .filter-tab[aria-pressed="false"] {
     @apply text-mist-400 hover:text-mist-200;
+  }
+
+  /* When the alert filter is on, the chrome around the results picks up a
+     little of the alert colour, so it is obvious at a glance that what is on
+     screen is a subset rather than everything. */
+  .summary-bar[data-active-filter="alert"] {
+    @apply border-verdict-alert/30 bg-verdict-alert-bg/40;
+  }
+
+  .summary-bar[data-active-filter="alert"] .filter-tab[aria-pressed="true"] {
+    @apply bg-verdict-alert-bg text-verdict-alert;
+  }
+
+  /* Each result card carries its verdict on its left edge, so the colour is
+     readable while scrolling without reading the badge. */
+  .verdict-alert-edge {
+    @apply border-l-4 border-l-verdict-alert;
+  }
+
+  .verdict-allow-edge {
+    @apply border-l-4 border-l-verdict-allow;
+  }
+
+  .verdict-ignore-edge {
+    @apply border-l-4 border-l-verdict-ignore;
+  }
+
+  /* The path and reason collapse on a narrow screen. The summary row is the
+     human sentence; the automaton path is one tap away rather than in the
+     way of somebody reading eight verdicts on a phone. */
+  .detail-toggle > summary {
+    @apply cursor-pointer list-none text-sm text-mist-400 hover:text-teal-300;
+  }
+
+  .detail-toggle > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .detail-toggle > summary::before {
+    content: "▸ ";
+    @apply text-mist-400;
+  }
+
+  .detail-toggle[open] > summary::before {
+    content: "▾ ";
   }
 }

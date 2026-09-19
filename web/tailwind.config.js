@@ -1,6 +1,28 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{ts,js}"],
+
+  /**
+   * Classes the scanner cannot see.
+   *
+   * Tailwind drops any @layer components class whose literal name never
+   * appears in the content files, and every one of these is built at runtime
+   * as `badge-${decision}` or `verdict-${decision}-edge`. The name therefore
+   * never exists as a string anywhere, so the rule was compiled and then
+   * thrown away, and the decision badges rendered in the inherited text
+   * colour rather than red, green and grey.
+   *
+   * Adding a verdict means adding its two names here. Listed literally rather
+   * than as a pattern, so the list is reviewable and cannot quietly grow.
+   */
+  safelist: [
+    "badge-alert",
+    "badge-allow",
+    "badge-ignore",
+    "verdict-alert-edge",
+    "verdict-allow-edge",
+    "verdict-ignore-edge",
+  ],
   theme: {
     extend: {
       /**
