@@ -148,8 +148,10 @@ class Rule:
             How many matches are needed before the rule fires. One means the
             rule fires on sight.
         window_seconds : int, optional
-            How wide the sliding window is, in seconds. Zero means the
-            window is counted in events rather than time.
+            How wide the sliding window is, counted in events rather than
+            clock time. The name is aspirational: nothing here parses a
+            timestamp, so twenty means twenty events apart in the stream.
+            Zero falls back to the engine's default span.
 
         Raises
         ------
@@ -269,7 +271,7 @@ class Rule:
 
     @property
     def window_seconds(self) -> int:
-        """int: Width of the sliding window in seconds, or zero for events."""
+        """int: Window width in events, or zero for the engine default."""
         return self._window_seconds
 
     @property

@@ -136,6 +136,19 @@ possibly read.
    the back, stale ones leave the front, and both are constant time. A list
    would make the removal linear, for no benefit.
 
+The second one is easier to see than to describe. Eight consecutive lines in
+the shipped sample are failed SSH passwords from the same address, and the
+queue is the only reason the fifth one gets a different verdict from the
+fourth:
+
+<p align="center">
+  <img src="assets/threshold-window.svg" alt="Lines 11 to 18 of the sample log, all failed SSH passwords from 203.0.113.42. Every line matches both invalid_user_probe and brute_force_ssh. On the first four the window holds 1 to 4 hits, brute_force_ssh is under its threshold of five and held back, and the medium alert is the verdict. From the fifth line the window holds 5 to 8, both rules are candidates, and brute_force_ssh wins the tie." width="880">
+</p>
+
+Nothing about the fifth line is different. The queue is what changed, and
+because it is kept per source, a second address failing passwords at the same
+time would never have pushed it over.
+
 ### Graph: the automaton itself
 
 <p align="center">
