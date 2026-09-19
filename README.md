@@ -1,3 +1,14 @@
+<p align="center">
+  <img src="assets/banner.svg" alt="PolicyGuard: defensive log policy compiled into a DFA. Three log lines badged alert, allow and ignore, each with the automaton path that decided it." width="880">
+</p>
+
+<p align="center">
+  <a href="https://github.com/IgorCSIS/policyguard/actions"><img src="https://img.shields.io/github/actions/workflow/status/IgorCSIS/policyguard/ci.yml?branch=main&label=tests&labelColor=0D141E&color=2DD4BF&style=flat-square" alt="Test status"></a>
+  <img src="https://img.shields.io/badge/python-3.10%20to%203.13-2DD4BF?labelColor=0D141E&style=flat-square" alt="Python 3.10 to 3.13">
+  <img src="https://img.shields.io/badge/dependencies-standard%20library-2DD4BF?labelColor=0D141E&style=flat-square" alt="Standard library only">
+  <img src="https://img.shields.io/badge/license-MIT-2DD4BF?labelColor=0D141E&style=flat-square" alt="MIT licensed">
+</p>
+
 # PolicyGuard
 
 A defensive log classifier. It compiles a pack of policy rules into a
@@ -17,6 +28,10 @@ $ python -m policyguard --explain
         why:  Five or more failed SSH passwords from one address inside a short
               window. Fired after 5 matching events from one source.
 ```
+
+<p align="center">
+  <img src="assets/screenshot.png" alt="The browser demo filtered to alerts, showing each log line with its rule, severity, automaton path and the reason the rule exists." width="880">
+</p>
 
 ## What PolicyGuard is, and what it is not
 
@@ -76,12 +91,23 @@ No installation step. Clone the repository and run it from the root.
 ### The tests
 
 ```bash
-python -m unittest discover -s tests -t .
+python -m unittest discover -s tests -t .      # 103 tests
+python tools/appendix_a_audit.py policyguard tools tests
 ```
 
-86 tests covering compilation, all three decisions, precedence, threshold
-windows, empty input, unknown tokens, path explain, the DOT export, every
-rule pack error, and the CLI exit codes.
+103 tests covering compilation, all three decisions, precedence, threshold
+windows, empty input, unknown tokens, path explain, the DOT export, both
+reporters, every rule pack error, and the CLI exit codes. CI runs them on
+Python 3.10, 3.11, 3.12 and 3.13.
+
+The second command is the style checker. Conventions that live only in a
+document drift, so `tools/appendix_a_audit.py` walks the package with `ast`
+and fails if anything disagrees with Appendix A: a missing docstring, a
+missing Parameters or Returns section, a public attribute that should be
+private behind a property, a constant without `Final`, a class without
+`__str__`. It runs in CI, and it has its own tests, including one that feeds
+it a deliberately broken module and checks every rule still fires. A linter
+nobody tests is a linter that has been quietly loosened until it passes.
 
 ## The data structures, and what they cost
 
@@ -163,6 +189,12 @@ What this project demonstrates:
   private with read-only properties, because a verdict that could be edited
   after the fact is not a record of anything, and a rule that could change
   after compilation would make the compiled automaton a lie.
+- **Abstraction and polymorphism.** `Reporter` is an abstract base class with
+  no default `render`, so a subclass that forgot to implement it cannot be
+  instantiated at all rather than silently producing nothing. `TableReporter`
+  and `JsonReporter` implement it, and the CLI holds one without knowing
+  which. Adding a CSV format means writing one class and adding one registry
+  entry; nothing in `cli.py` changes.
 - **Hash tables** as the transition function, with the complexity argument
   that follows from average constant-time lookup.
 - **Queues** in two genuinely different roles, construction and sliding
@@ -280,11 +312,14 @@ policyguard/
   automaton.py      the DFA: trie, failure links, goto completion, matching
   engine.py         precedence, sliding windows, and the verdict stream
   alert.py          Verdict for every line, Alert for the ones that matter
-  cli.py            argparse interface and the report
+  report.py         the Reporter abstraction, and the table and JSON formats
+  cli.py            argparse interface, flag parsing, and exit codes
   errors.py         the errors this package raises on purpose
 policies/           rule packs as JSON
 samples/            synthetic log lines
-tests/              unittest
+tests/              unittest, including tests for the style checker
+tools/              the Appendix A audit and the social card generator
+assets/             logo, banner, screenshot, and the social card source
 docs/DESIGN.md      the automaton model, worked by hand
 web/                the browser demo, with the parity check
 ```
@@ -293,6 +328,8 @@ Every Python module follows the Appendix A conventions: snake_case names,
 `Final` on constants, a leading underscore on anything private, docstrings on
 every module, class, and function with Parameters, Returns and Raises
 sections, and encapsulation through properties rather than public attributes.
+That is not a promise, it is a check: run `python tools/appendix_a_audit.py`
+and it either prints nothing or tells you exactly which line disagrees.
 
 ## Defensive scope
 

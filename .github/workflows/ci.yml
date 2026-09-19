@@ -29,6 +29,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Appendix A conventions
+        run: python tools/appendix_a_audit.py policyguard tools tests
+
       - name: Tests
         run: python -m unittest discover -s tests -t . -v
 

@@ -8,15 +8,14 @@ socket: the whole tool reads files and writes to standard output.
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from pathlib import Path
-from typing import Final, Iterator, Sequence, TextIO
+from typing import Final, Iterator, Sequence
 
 from policyguard import __version__
-from policyguard.alert import Verdict
 from policyguard.engine import PolicyEngine
 from policyguard.errors import LogSourceError, PolicyGuardError
+from policyguard.report import REPORTERS, Reporter
 from policyguard.rule import Decision, RulePack
 
 #: Where the shipped rule pack and sample log live, relative to the repo root.
@@ -28,11 +27,6 @@ DEFAULT_SAMPLE: Final[Path] = _ROOT / 'samples' / 'office-auth.log'
 EXIT_OK: Final[int] = 0
 EXIT_ERROR: Final[int] = 1
 EXIT_ALERTS_FOUND: Final[int] = 2
-
-#: Column widths for the text report.
-_LINE_WIDTH: Final[int] = 5
-_DECISION_WIDTH: Final[int] = 7
-_RULE_WIDTH: Final[int] = 24
 
 
 def _read_lines(path: str | None) -> Iterator[str]:
@@ -67,67 +61,30 @@ def _read_lines(path: str | None) -> Iterator[str]:
         raise LogSourceError(f'Could not read {target}: {error}') from error
 
 
-def _print_table(verdicts: Sequence[Verdict], stream: TextIO, explain: bool) -> None:
-    """Print the verdicts as a readable table.
+def _build_reporter(args: argparse.Namespace, automaton_summary: str) -> Reporter:
+    """Choose the reporter the flags ask for.
+
+    ``--json`` is kept as a shorthand for ``--format json`` because the parity
+    check and anything else scripted against this tool already use it, and
+    breaking them to tidy up an interface would be a poor trade.
 
     Parameters
     ----------
-    verdicts : sequence of Verdict
-        The classified lines.
-    stream : TextIO
-        Where to write.
-    explain : bool
-        Whether to print the automaton path under each matched line.
+    args : argparse.Namespace
+        The parsed command line.
+    automaton_summary : str
+        One line describing the compiled automaton, included when ``--stats``
+        was given.
+
+    Returns
+    -------
+    Reporter
+        A reporter ready to render the run.
     """
-    header = (
-        f'{"LINE":>{_LINE_WIDTH}}  {"DECISION":<{_DECISION_WIDTH}}  '
-        f'{"RULE":<{_RULE_WIDTH}}  EVENT'
-    )
-    print(header, file=stream)
-    print('-' * (len(header) + 12), file=stream)
-
-    for verdict in verdicts:
-        raw = verdict.event.raw
-        print(
-            f'{verdict.event.line_number:>{_LINE_WIDTH}}  '
-            f'{verdict.decision.value:<{_DECISION_WIDTH}}  '
-            f'{verdict.rule_id:<{_RULE_WIDTH}}  {raw}',
-            file=stream,
-        )
-        if explain and verdict.rule is not None:
-            print(f'{"":>{_LINE_WIDTH}}  path: {verdict.describe_path()}', file=stream)
-            print(f'{"":>{_LINE_WIDTH}}  why:  {verdict.reason}', file=stream)
-
-
-def _print_summary(engine: PolicyEngine, stream: TextIO) -> None:
-    """Print the counts and the alert list.
-
-    Parameters
-    ----------
-    engine : PolicyEngine
-        The engine that did the classifying.
-    stream : TextIO
-        Where to write.
-    """
-    counts = engine.counts
-    total = sum(counts.values())
-    print('', file=stream)
-    print(
-        f'{total} lines classified: '
-        + ', '.join(f'{counts[decision]} {decision}' for decision in Decision),
-        file=stream,
-    )
-
-    if engine.alerts:
-        print('', file=stream)
-        print(f'{len(engine.alerts)} alert(s):', file=stream)
-        for alert in engine.alerts:
-            print(f'  {alert}', file=stream)
-    print('', file=stream)
-    print(
-        'PolicyGuard classifies logs. It does not block, scan, or contact anything.',
-        file=stream,
-    )
+    summary = automaton_summary if args.stats else ''
+    if args.json or args.format == 'json':
+        return REPORTERS['json'](automaton_summary=summary)
+    return REPORTERS['table'](explain=args.explain, automaton_summary=summary)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -175,9 +132,16 @@ def build_parser() -> argparse.ArgumentParser:
         help='Show only lines with this decision',
     )
     parser.add_argument(
+        '-f',
+        '--format',
+        choices=sorted(REPORTERS),
+        default='table',
+        help='How to print the verdicts (default: table)',
+    )
+    parser.add_argument(
         '--json',
         action='store_true',
-        help='Print the verdicts as JSON instead of a table (used by the parity check)',
+        help='Shorthand for --format json, which is what the parity check uses',
     )
     parser.add_argument(
         '--dot',
@@ -236,18 +200,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         wanted = Decision.parse(args.only)
         shown = [verdict for verdict in verdicts if verdict.decision is wanted]
 
-    if args.json:
-        payload = {
-            'policy': pack.name,
-            'counts': {decision.value: count for decision, count in engine.counts.items()},
-            'verdicts': [verdict.to_dict() for verdict in shown],
-        }
-        print(json.dumps(payload, indent=2))
-    else:
-        _print_table(shown, sys.stdout, explain=args.explain)
-        _print_summary(engine, sys.stdout)
-        if args.stats:
-            print(f'{engine.automaton}', file=sys.stdout)
+    # The CLI holds a Reporter without knowing which one. Adding a format
+    # means adding a class in report.py, not a branch here.
+    reporter: Reporter = _build_reporter(args, str(engine.automaton))
+    print(reporter.render(shown, engine.counts, engine.alerts, pack.name))
 
     if args.fail_on_alert and engine.alerts:
         return EXIT_ALERTS_FOUND

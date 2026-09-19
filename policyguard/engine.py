@@ -325,10 +325,11 @@ class PolicyEngine:
             Raw lines, with or without trailing newlines. A file object works
             directly, which is what keeps memory flat on a large log.
 
-        Yields
-        ------
-        Verdict
-            One per non-blank line.
+        Returns
+        -------
+        iterator of Verdict
+            One per non-blank line. This returns the iterator rather than
+            yielding, so nothing is read until the caller starts consuming it.
         """
         return self.classify_events(events_from_lines(lines))
 

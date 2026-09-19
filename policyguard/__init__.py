@@ -34,6 +34,7 @@ from policyguard.errors import (
     RulePackError,
 )
 from policyguard.event import Event
+from policyguard.report import JsonReporter, Reporter, TableReporter
 from policyguard.rule import Decision, Rule, RulePack
 from policyguard.transition import Transition
 
@@ -49,9 +50,12 @@ __all__ = [
     'LogSourceError',
     'PolicyEngine',
     'PolicyGuardError',
+    'JsonReporter',
+    'Reporter',
     'Rule',
     'RulePack',
     'RulePackError',
+    'TableReporter',
     'Transition',
     'Verdict',
     '__version__',

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300" role="img" aria-label="PolicyGuard: defensive log policy compiled into a deterministic finite automaton.">
+  <title>PolicyGuard</title>
+  <desc>Three log lines labelled alert, allow and ignore, each showing the automaton path that decided it.</desc>
+
+  <rect width="1200" height="300" rx="16" fill="#080D14"/>
+  <rect x="0.5" y="0.5" width="1199" height="299" rx="15.5" fill="none" stroke="#223044"/>
+
+  <g transform="translate(66 104) scale(2.75)">
+      <rect width="32" height="32" rx="7" fill="#080D14"/>
+      <path d="M16 5.2 25.2 8.6v7.1c0 5.3-3.7 9.7-9.2 11.6-5.5-1.9-9.2-6.3-9.2-11.6V8.6z"
+      fill="none" stroke="#2DD4BF" stroke-width="2.1" stroke-linejoin="round"/>
+      <circle cx="12.3" cy="15.1" r="2" fill="#2DD4BF"/>
+      <circle cx="19.7" cy="15.1" r="2" fill="#5EEAD4"/>
+      <path d="M14.3 15.1h3.4" stroke="#5EEAD4" stroke-width="1.7" stroke-linecap="round"/>
+      <path d="M12.3 19.6h7.4" stroke="#31435C" stroke-width="1.7" stroke-linecap="round"/>
+  </g>
+
+  <text x="174" y="128" font-family="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="50" font-weight="700" fill="#F6F8FA" letter-spacing="-1">PolicyGuard</text>
+  <text x="176" y="166" font-family="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="22" fill="#8CA0B8">Defensive log policy, compiled into a DFA</text>
+  <circle cx="183" cy="198" r="5" fill="#2DD4BF"/>
+  <text x="197" y="204" font-family="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="19" fill="#8CA0B8">Python standard library only. No network calls.</text>
+
+    <g transform="translate(660 54)">
+      <rect width="474" height="58" rx="9" fill="#111A26" stroke="#223044"/>
+      <rect x="14" y="13" width="62" height="20" rx="10" fill="#2B1417"/>
+      <text x="45" y="27" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#F87171" letter-spacing="0.7">ALERT</text>
+      <text x="88" y="27" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#C9D4E0">Failed password for invalid user admin</text>
+      <text x="88" y="45" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#5EEAD4">q0 -> q13 -> q14 -> ACCEPT: invalid_user_probe</text>
+    </g>
+    <g transform="translate(660 120)">
+      <rect width="474" height="58" rx="9" fill="#111A26" stroke="#223044"/>
+      <rect x="14" y="13" width="62" height="20" rx="10" fill="#0C2A22"/>
+      <text x="45" y="27" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#34D399" letter-spacing="0.7">ALLOW</text>
+      <text x="88" y="27" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#C9D4E0">Accepted publickey for itadmin</text>
+      <text x="88" y="45" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#5EEAD4">q0 -> q6 -> q7 -> q8 -> ACCEPT: allow_known_admin_host</text>
+    </g>
+    <g transform="translate(660 186)">
+      <rect width="474" height="58" rx="9" fill="#111A26" stroke="#223044"/>
+      <rect x="14" y="13" width="62" height="20" rx="10" fill="#161F2C"/>
+      <text x="45" y="27" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#94A3B8" letter-spacing="0.7">IGNORE</text>
+      <text x="88" y="27" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#C9D4E0">cron session opened for user root</text>
+      <text x="88" y="45" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#5EEAD4">q0 -> q26 -> q27 -> q28 -> ACCEPT: ignore_cron_chatter</text>
+    </g>
+</svg>

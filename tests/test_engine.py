@@ -8,14 +8,15 @@ from __future__ import annotations
 
 import unittest
 from pathlib import Path
+from typing import Final
 
 from policyguard.alert import Alert, Verdict
 from policyguard.engine import PolicyEngine
 from policyguard.event import Event
 from policyguard.rule import Decision, Rule, RulePack
 
-_POLICY = Path(__file__).resolve().parent.parent / 'policies' / 'baseline.json'
-_SAMPLE = Path(__file__).resolve().parent.parent / 'samples' / 'office-auth.log'
+_POLICY: Final[Path] = Path(__file__).resolve().parent.parent / 'policies' / 'baseline.json'
+_SAMPLE: Final[Path] = Path(__file__).resolve().parent.parent / 'samples' / 'office-auth.log'
 
 
 def _engine(rules: list[Rule], default: Decision = Decision.IGNORE) -> PolicyEngine:

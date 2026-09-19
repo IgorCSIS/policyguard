@@ -12,6 +12,66 @@
     <meta name="author" content="Igor Lima" />
     <link rel="canonical" href="https://igorcsis.github.io/policyguard/" />
     <link rel="icon" type="image/svg+xml" href="/policyguard/favicon.svg" />
+
+    <!--
+      Absolute URLs on purpose. Scrapers do not resolve relative paths, and a
+      Vite base of /policyguard/ makes that easy to get wrong.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PolicyGuard" />
+    <meta property="og:title" content="PolicyGuard: every log line, labelled and explained" />
+    <meta
+      property="og:description"
+      content="Policy rules compiled into a deterministic finite automaton. Paste log lines and see each one labelled allow, alert, or ignore with the state path that decided it."
+    />
+    <meta property="og:url" content="https://igorcsis.github.io/policyguard/" />
+    <meta property="og:image" content="https://igorcsis.github.io/policyguard/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Three log lines badged alert, allow and ignore, each with the automaton path that decided it."
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PolicyGuard: every log line, labelled and explained" />
+    <meta
+      name="twitter:description"
+      content="Policy rules compiled into a deterministic finite automaton. Runs entirely in your browser, with a matching Python command line tool."
+    />
+    <meta name="twitter:image" content="https://igorcsis.github.io/policyguard/og-image.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "PolicyGuard",
+        "url": "https://igorcsis.github.io/policyguard/",
+        "description": "A free browser tool that classifies log lines against policy rules compiled into a deterministic finite automaton, labelling each line allow, alert, or ignore with the state path that decided it.",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript. Runs in any modern browser.",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "license": "https://opensource.org/licenses/MIT",
+        "author": {
+          "@type": "Person",
+          "name": "Igor Lima",
+          "url": "https://igorcsis.github.io/niftyai-portfolio/"
+        },
+        "sameAs": "https://github.com/IgorCSIS/policyguard",
+        "featureList": [
+          "Compiles policy rules into a deterministic finite automaton",
+          "Labels each log line allow, alert, or ignore",
+          "Shows the automaton state path behind every decision",
+          "Threshold rules with a per-source sliding window",
+          "Matching Python command line tool with a parity check",
+          "Runs entirely in the browser with nothing uploaded"
+        ],
+        "image": "https://igorcsis.github.io/policyguard/og-image.png"
+      }
+    </script>
     <!--
       No web fonts. The page promises that a pasted log never leaves the
       browser, and a font request would still be a request going out while

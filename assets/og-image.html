@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!--
+      Source for web/public/og-image.png, the 1200x630 card shown when the
+      link is pasted into Slack, LinkedIn or a message.
+
+      HTML rather than SVG because it is rasterized once, so it can use real
+      layout instead of hand-placed coordinates. Regenerate with:
+
+        node tools/make-og-image.mjs
+
+      which needs a Chromium and is not part of any build. The PNG is
+      committed, so shipping the site needs neither.
+    -->
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        width: 1200px; height: 630px; display: flex; flex-direction: column;
+        justify-content: space-between; padding: 64px 72px; background: #080D14;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        color: #F6F8FA;
+      }
+      .top { display: flex; align-items: center; gap: 20px; }
+      .top img { width: 64px; height: 64px; }
+      .top span { font-size: 36px; font-weight: 600; color: #C9D4E0; letter-spacing: -0.4px; }
+      h1 { font-size: 54px; font-weight: 700; line-height: 1.12; letter-spacing: -1.4px; max-width: 540px; }
+      .sub { font-size: 25px; color: #8CA0B8; margin-top: 20px; max-width: 520px; line-height: 1.4; }
+      .mid { display: flex; align-items: center; justify-content: space-between; gap: 40px; }
+      .cards { display: flex; flex-direction: column; gap: 12px; width: 480px; flex: none; }
+      .card {
+        background: #111A26; border: 1px solid #223044; border-radius: 12px;
+        padding: 14px 18px; display: flex; align-items: center; gap: 14px;
+      }
+      .badge {
+        font-size: 13px; font-weight: 600; letter-spacing: 0.7px; padding: 5px 10px;
+        border-radius: 5px; flex: none; width: 76px; text-align: center;
+      }
+      .alert { background: #2B1417; color: #F87171; }
+      .allow { background: #0C2A22; color: #34D399; }
+      .ignore { background: #161F2C; color: #94A3B8; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 15px; color: #C9D4E0; }
+      .path { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; color: #5EEAD4; margin-top: 3px; }
+      .bottom { display: flex; align-items: center; justify-content: space-between; }
+      .url { font-size: 24px; color: #2DD4BF; font-weight: 600; }
+      .facts { font-size: 21px; color: #8CA0B8; }
+    </style>
+  </head>
+  <body>
+    <div class="top">
+      <img src="logo.svg" alt="" />
+      <span>PolicyGuard</span>
+    </div>
+
+    <div class="mid">
+      <div>
+        <h1>Every log line, labelled and explained.</h1>
+        <p class="sub">Policy rules compiled into a deterministic finite automaton.</p>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <span class="badge alert">ALERT</span>
+          <div>
+            <div class="mono">Failed password for invalid user admin</div>
+            <div class="path">q0 -&gt; q13 -&gt; q14 -&gt; ACCEPT</div>
+          </div>
+        </div>
+        <div class="card">
+          <span class="badge allow">ALLOW</span>
+          <div>
+            <div class="mono">Accepted publickey for itadmin</div>
+            <div class="path">q0 -&gt; q6 -&gt; q7 -&gt; q8 -&gt; ACCEPT</div>
+          </div>
+        </div>
+        <div class="card">
+          <span class="badge ignore">IGNORE</span>
+          <div>
+            <div class="mono">cron session opened for user root</div>
+            <div class="path">q0 -&gt; q26 -&gt; q27 -&gt; q28 -&gt; ACCEPT</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <span class="url">igorcsis.github.io/policyguard</span>
+      <span class="facts">Runs in your browser. Nothing uploaded.</span>
+    </div>
+  </body>
+</html>

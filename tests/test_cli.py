@@ -12,12 +12,13 @@ import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
+from typing import Final
 
 from policyguard.cli import EXIT_ALERTS_FOUND, EXIT_ERROR, EXIT_OK, main
 
-_ROOT = Path(__file__).resolve().parent.parent
-_POLICY = str(_ROOT / 'policies' / 'baseline.json')
-_SAMPLE = str(_ROOT / 'samples' / 'office-auth.log')
+_ROOT: Final[Path] = Path(__file__).resolve().parent.parent
+_POLICY: Final[str] = str(_ROOT / 'policies' / 'baseline.json')
+_SAMPLE: Final[str] = str(_ROOT / 'samples' / 'office-auth.log')
 
 
 def _run(args: list[str]) -> tuple[int, str, str]:
@@ -87,6 +88,24 @@ class TestOutputModes(unittest.TestCase):
         self.assertTrue(payload['verdicts'])
         for verdict in payload['verdicts']:
             self.assertEqual(verdict['decision'], 'alert')
+
+    def test_the_format_flag_selects_a_reporter(self) -> None:
+        """The CLI picks from the registry rather than branching on a bool."""
+        _, as_json, _ = _run([_SAMPLE, '-p', _POLICY, '--format', 'json'])
+        _, as_table, _ = _run([_SAMPLE, '-p', _POLICY, '--format', 'table'])
+        self.assertEqual(json.loads(as_json)['counts']['alert'], 21)
+        self.assertIn('LINE  DECISION', as_table)
+
+    def test_json_stays_a_shorthand_for_the_format_flag(self) -> None:
+        """Scripts already use --json, so removing it would break them."""
+        _, shorthand, _ = _run([_SAMPLE, '-p', _POLICY, '--json'])
+        _, spelled_out, _ = _run([_SAMPLE, '-p', _POLICY, '--format', 'json'])
+        self.assertEqual(json.loads(shorthand), json.loads(spelled_out))
+
+    def test_an_unknown_format_is_refused_by_the_parser(self) -> None:
+        """argparse lists the valid choices, which is the right error here."""
+        with self.assertRaises(SystemExit):
+            _run([_SAMPLE, '-p', _POLICY, '--format', 'yaml'])
 
     def test_stats_reports_the_compiled_automaton(self) -> None:
         """The numbers behind the Big-O claim should be one flag away."""
