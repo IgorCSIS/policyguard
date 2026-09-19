@@ -83,7 +83,13 @@ jobs:
       - run: npm run build
         working-directory: web
 
+      # enablement creates the Pages site over the API on the first run, so
+      # nobody has to go and flip a switch in Settings before the first deploy
+      # can work. The pages: write permission above is what allows it.
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web/dist
